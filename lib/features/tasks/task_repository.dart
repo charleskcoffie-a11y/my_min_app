@@ -1,4 +1,3 @@
-//
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/task.dart';
 
@@ -9,7 +8,8 @@ class TaskRepository {
     final response = await _client
         .from('tasks')
         .select()
-        .order('task_date', ascending: true);
+        .order('task_date', ascending: true)
+        .order('created_at', ascending: true);
 
     final list = response as List<dynamic>;
     return list
@@ -17,17 +17,38 @@ class TaskRepository {
         .toList();
   }
 
-  Future<void> addSampleTask() async {
-    final now = DateTime.now();
+  Future<void> createTask({
+    required String title,
+    required String category,
+    String? description,
+    required DateTime taskDate,
+    required String priority,
+  }) async {
     await _client.from('tasks').insert({
-      'title': 'Sample task from Flutter',
-      'category': 'Other',
-      'description': 'Created from the Flutter ministry app',
-      'task_date': now.toIso8601String(),
-      'priority': 'Medium',
+      'title': title,
+      'category': category,
+      'description': description,
+      'task_date': taskDate.toIso8601String(),
+      'priority': priority,
       'status': 'Pending',
       'is_completed': false,
-      'created_at': now.toIso8601String(),
     });
   }
+
+  Future<void> toggleCompleted(Task task) async {
+    final newCompleted = !task.isCompleted;
+    await _client
+        .from('tasks')
+        .update({
+          'is_completed': newCompleted,
+          'status': newCompleted ? 'Completed' : 'Pending',
+          'completed_at': newCompleted ? DateTime.now().toIso8601String() : null,
+        })
+        .eq('id', task.id);
+  }
+
+  Future<void> deleteTask(String id) async {
+    await _client.from('tasks').delete().eq('id', id);
+  }
 }
+
