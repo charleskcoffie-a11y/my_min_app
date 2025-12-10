@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/gemini_service.dart';
+import '../counseling_notes/counseling_notes_screen.dart';
 
 class CounsellingScreen extends StatelessWidget {
   final GeminiService gemini;
@@ -12,8 +13,32 @@ class CounsellingScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Counselling'),
       ),
-      body: const Center(
-        child: Text('Counselling feature coming soon.'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Counselling & Pastoral Care'),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const CounselingNotesScreen()),
+                );
+              },
+              icon: const Icon(Icons.note_outlined),
+              label: const Text('Open Counseling Notes'),
+            ),
+            const SizedBox(height: 12),
+            const Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Text(
+                'Use the Counseling Notes tool to securely store and manage confidential pastoral counseling records.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

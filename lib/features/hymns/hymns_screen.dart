@@ -1,17 +1,8 @@
-import 'package:flutter/material.dart';
+export 'hymnal_screen.dart' show HymnalScreen;
 
-class HymnsScreen extends StatelessWidget {
+// Re-export as HymnsScreen for backward compatibility
+import 'hymnal_screen.dart';
+
+class HymnsScreen extends HymnalScreen {
   const HymnsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hymns'),
-      ),
-      body: const Center(
-        child: Text('Hymns feature coming soon.'),
-      ),
-    );
-  }
 }

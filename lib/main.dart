@@ -3,18 +3,25 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/app_theme.dart';
 import 'core/gemini_service.dart';
+import 'core/notification_service.dart';
 
 import 'features/home/home_screen.dart';
 import 'features/devotion/devotion_screen.dart';
 import 'features/counselling/counselling_screen.dart';
 import 'features/tasks/tasks_screen.dart';
+import 'features/pastoral_tasks/pastoral_tasks_screen.dart';
+import 'features/counseling_notes/counseling_notes_screen.dart';
 import 'features/hymns/hymns_screen.dart';
-import 'features/standing_orders/standing_orders_screen.dart';
 import 'features/christian_calendar/christian_calendar_screen.dart';
+import 'features/schedule/schedule_screen.dart';
+import 'core/appointment_notification_service.dart';
 import 'secrets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await NotificationService().init();
+  await AppointmentNotificationService().initialize();
 
   await Supabase.initialize(
     url: supabaseUrl,
@@ -38,6 +45,10 @@ class MinistryApp extends StatelessWidget {
     return MaterialApp(
       title: 'Ministry App',
       theme: AppTheme.lightTheme,
+      routes: {
+        '/pastoral-tasks': (_) => const PastoralTasksScreen(),
+        '/counseling-notes': (_) => const CounselingNotesScreen(),
+      },
       home: MainTabs(geminiService: geminiService),
     );
   }
@@ -62,8 +73,9 @@ class _MainTabsState extends State<MainTabs> {
       DevotionScreen(gemini: widget.geminiService),
       CounsellingScreen(gemini: widget.geminiService),
       TasksScreen(gemini: widget.geminiService),
+      const ScheduleScreen(),
+      const CounselingNotesScreen(),
       const HymnsScreen(),
-      const StandingOrdersScreen(),
       const ChristianCalendarScreen(),
     ];
 
@@ -78,8 +90,9 @@ class _MainTabsState extends State<MainTabs> {
           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Devotion'),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Counsel'),
           BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Tasks'),
+          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Schedule'),
+          BottomNavigationBarItem(icon: Icon(Icons.note_outlined), label: 'Notes'),
           BottomNavigationBarItem(icon: Icon(Icons.music_note), label: 'Hymns'),
-          BottomNavigationBarItem(icon: Icon(Icons.article), label: 'Orders'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendar'),
         ],
       ),

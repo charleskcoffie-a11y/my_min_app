@@ -9,6 +9,8 @@ class Task {
   final String priority;
   final String status;
   final String? message;
+  final DateTime? reminderAt;
+  final int? notificationId;
   final bool isCompleted;
   final DateTime? completedAt;
   final DateTime createdAt;
@@ -22,6 +24,8 @@ class Task {
     this.priority = 'Medium',
     this.status = 'Pending',
     this.message,
+    this.reminderAt,
+    this.notificationId,
     this.isCompleted = false,
     this.completedAt,
     required this.createdAt,
@@ -43,6 +47,8 @@ class Task {
       priority: map['priority'] as String? ?? 'Medium',
       status: map['status'] as String? ?? 'Pending',
       message: map['message'] as String?,
+      reminderAt: map['reminder_at'] != null ? parseDate(map['reminder_at']) : null,
+      notificationId: map['notification_id'] as int?,
       isCompleted: map['is_completed'] as bool? ?? false,
       completedAt:
           map['completed_at'] != null ? parseDate(map['completed_at']) : null,
@@ -62,6 +68,8 @@ class Task {
       'priority': priority,
       'status': status,
       'message': message,
+      'reminder_at': reminderAt?.toIso8601String(),
+      'notification_id': notificationId,
       'is_completed': isCompleted,
       'completed_at': completedAt?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),

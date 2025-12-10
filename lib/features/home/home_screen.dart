@@ -7,19 +7,25 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Ministry Dashboard')),
-      body: const Padding(
-        padding: EdgeInsets.all(16),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Welcome, Reverend',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 12),
-            Text(
+            const SizedBox(height: 12),
+            const Text(
               'Use the tabs below for Devotions, Counselling, Tasks, Hymns, '
               'Standing Orders, and the Christian Calendar.',
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).pushNamed('/pastoral-tasks'),
+              icon: const Icon(Icons.task_alt),
+              label: const Text('Pastoral Task Tracker'),
             ),
           ],
         ),
