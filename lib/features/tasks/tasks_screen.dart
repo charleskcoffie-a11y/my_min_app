@@ -25,6 +25,19 @@ class _TasksScreenState extends State<TasksScreen> {
   String _selectedPriority = 'Medium';
   DateTime _selectedDate = DateTime.now();
 
+  // FILTER STATE
+  String _statusFilter = 'All';    // All, Pending, Completed
+  String _categoryFilter = 'All';  // All, Preaching, Visitation, Counselling, Other
+
+  List<Task> get _filteredTasks {
+    return _tasks.where((t) {
+      final statusOk = _statusFilter == 'All' || t.status == _statusFilter;
+      final categoryOk =
+          _categoryFilter == 'All' || t.category == _categoryFilter;
+      return statusOk && categoryOk;
+    }).toList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -283,6 +296,117 @@ class _TasksScreenState extends State<TasksScreen> {
     }
   }
 
+  // ---------- FILTER UI ----------
+
+  Widget _buildFilters() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              value: _statusFilter,
+              decoration: const InputDecoration(
+                labelText: 'Status',
+                border: OutlineInputBorder(),
+                isDense: true,
+              ),
+              items: const [
+                DropdownMenuItem(value: 'All', child: Text('All')),
+                DropdownMenuItem(value: 'Pending', child: Text('Pending')),
+                DropdownMenuItem(value: 'Completed', child: Text('Completed')),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => _statusFilter = value);
+                }
+              },
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              value: _categoryFilter,
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                border: OutlineInputBorder(),
+                isDense: true,
+              ),
+              items: const [
+                DropdownMenuItem(value: 'All', child: Text('All')),
+                DropdownMenuItem(value: 'Preaching', child: Text('Preaching')),
+                DropdownMenuItem(value: 'Visitation', child: Text('Visitation')),
+                DropdownMenuItem(
+                    value: 'Counselling', child: Text('Counselling')),
+                DropdownMenuItem(value: 'Other', child: Text('Other')),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => _categoryFilter = value);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTaskList() {
+    final visibleTasks = _filteredTasks;
+
+    if (visibleTasks.isEmpty) {
+      return const Center(
+        child: Text('No tasks match your filters.'),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: visibleTasks.length,
+      itemBuilder: (context, index) {
+        final t = visibleTasks[index];
+        return Dismissible(
+          key: ValueKey(t.id),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 16),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          confirmDismiss: (_) async {
+            await _deleteTask(t);
+            return false; // we reload list manually
+          },
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(
+                t.isCompleted
+                    ? Icons.check_circle
+                    : Icons.radio_button_unchecked,
+              ),
+              onPressed: () => _toggleCompleted(t),
+            ),
+            title: Text(
+              t.title ?? 'Untitled task',
+              style: TextStyle(
+                decoration: t.isCompleted
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+              ),
+            ),
+            subtitle: Text(
+              '${t.category} • ${t.priority} • ${t.status} • '
+              '${t.taskDate.toLocal().toString().split(' ').first}',
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ---------- BUILD ----------
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -308,50 +432,13 @@ class _TasksScreenState extends State<TasksScreen> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 )
-              : _tasks.isEmpty
-                  ? const Center(child: Text('No tasks yet. Tap + to add one.'))
-                  : ListView.builder(
-                      itemCount: _tasks.length,
-                      itemBuilder: (context, index) {
-                        final t = _tasks[index];
-                        return Dismissible(
-                          key: ValueKey(t.id),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 16),
-                            child: const Icon(Icons.delete, color: Colors.white),
-                          ),
-                          confirmDismiss: (_) async {
-                            await _deleteTask(t);
-                            return false; // we reload list manually
-                          },
-                          child: ListTile(
-                            leading: IconButton(
-                              icon: Icon(
-                                t.isCompleted
-                                    ? Icons.check_circle
-                                    : Icons.radio_button_unchecked,
-                              ),
-                              onPressed: () => _toggleCompleted(t),
-                            ),
-                            title: Text(
-                              t.title ?? 'Untitled task',
-                              style: TextStyle(
-                                decoration: t.isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${t.category} • ${t.priority} • ${t.status} • '
-                              '${t.taskDate.toLocal().toString().split(' ').first}',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+              : Column(
+                  children: [
+                    _buildFilters(),          // 👈 filters row
+                    const SizedBox(height: 4),
+                    Expanded(child: _buildTaskList()),
+                  ],
+                ),
     );
   }
 }
