@@ -267,7 +267,7 @@ class _HymnalScreenState extends State<HymnalScreen> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       child: Row(
         children: List.generate(tabs.length, (index) {
           final tab = tabs[index];
@@ -275,11 +275,11 @@ class _HymnalScreenState extends State<HymnalScreen> {
           final isActive = _activeTab == tab;
 
           return Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 4),
             child: GestureDetector(
               onTap: () => _changeTab(tab),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: isActive
                       ? LinearGradient(
@@ -295,15 +295,15 @@ class _HymnalScreenState extends State<HymnalScreen> {
                     Icon(
                       icon,
                       color: isActive ? Colors.white : Colors.grey.shade700,
-                      size: 18,
+                      size: 16,
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 4),
                     Text(
                       tab,
                       style: TextStyle(
                         color: isActive ? Colors.white : Colors.grey.shade700,
                         fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                        fontSize: 13,
+                        fontSize: 11,
                       ),
                     ),
                   ],

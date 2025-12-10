@@ -5,7 +5,7 @@ import 'core/app_theme.dart';
 import 'core/gemini_service.dart';
 import 'core/notification_service.dart';
 
-import 'features/home/home_screen.dart';
+import 'features/home/home_screen_modern.dart';
 import 'features/devotion/devotion_screen.dart';
 import 'features/counselling/counselling_screen.dart';
 import 'features/tasks/tasks_screen.dart';
@@ -14,6 +14,7 @@ import 'features/counseling_notes/counseling_notes_screen.dart';
 import 'features/hymns/hymns_screen.dart';
 import 'features/christian_calendar/christian_calendar_screen.dart';
 import 'features/schedule/schedule_screen.dart';
+import 'features/programs/program_manager_screen.dart';
 import 'core/appointment_notification_service.dart';
 import 'secrets.dart';
 
@@ -69,7 +70,7 @@ class _MainTabsState extends State<MainTabs> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      const HomeScreen(),
+      const HomeScreenModern(),
       DevotionScreen(gemini: widget.geminiService),
       CounsellingScreen(gemini: widget.geminiService),
       TasksScreen(gemini: widget.geminiService),
@@ -77,6 +78,7 @@ class _MainTabsState extends State<MainTabs> {
       const CounselingNotesScreen(),
       const HymnsScreen(),
       const ChristianCalendarScreen(),
+      const ProgramManagerScreen(),
     ];
 
     return Scaffold(
@@ -94,6 +96,7 @@ class _MainTabsState extends State<MainTabs> {
           BottomNavigationBarItem(icon: Icon(Icons.note_outlined), label: 'Notes'),
           BottomNavigationBarItem(icon: Icon(Icons.music_note), label: 'Hymns'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendar'),
+          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Programs'),
         ],
       ),
     );
