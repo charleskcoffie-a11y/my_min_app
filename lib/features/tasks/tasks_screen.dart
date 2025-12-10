@@ -115,7 +115,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   children: [
                     Expanded(
                       child: DropdownButtonFormField<String>(
-                        value: _selectedCategory,
+                        initialValue: _selectedCategory,
                         decoration: const InputDecoration(
                           labelText: 'Category',
                           border: OutlineInputBorder(),
@@ -148,7 +148,7 @@ class _TasksScreenState extends State<TasksScreen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: DropdownButtonFormField<String>(
-                        value: _selectedPriority,
+                        initialValue: _selectedPriority,
                         decoration: const InputDecoration(
                           labelText: 'Priority',
                           border: OutlineInputBorder(),
@@ -220,6 +220,7 @@ class _TasksScreenState extends State<TasksScreen> {
     );
 
     if (picked != null) {
+      if (!mounted) return;
       setState(() {
         _selectedDate = picked;
       });
@@ -245,9 +246,11 @@ class _TasksScreenState extends State<TasksScreen> {
         taskDate: _selectedDate,
         priority: _selectedPriority,
       );
+      if (!mounted) return;
       Navigator.of(context).pop(); // close bottom sheet
       await _loadTasks();
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error saving task: $e')),
       );
@@ -259,6 +262,7 @@ class _TasksScreenState extends State<TasksScreen> {
       await _repo.toggleCompleted(task);
       await _loadTasks();
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error updating task: $e')),
       );
@@ -288,8 +292,10 @@ class _TasksScreenState extends State<TasksScreen> {
 
     try {
       await _repo.deleteTask(task.id);
+      if (!mounted) return;
       await _loadTasks();
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error deleting task: $e')),
       );
@@ -304,8 +310,8 @@ class _TasksScreenState extends State<TasksScreen> {
       child: Row(
         children: [
           Expanded(
-            child: DropdownButtonFormField<String>(
-              value: _statusFilter,
+              child: DropdownButtonFormField<String>(
+              initialValue: _statusFilter,
               decoration: const InputDecoration(
                 labelText: 'Status',
                 border: OutlineInputBorder(),
@@ -326,7 +332,7 @@ class _TasksScreenState extends State<TasksScreen> {
           const SizedBox(width: 8),
           Expanded(
             child: DropdownButtonFormField<String>(
-              value: _categoryFilter,
+              initialValue: _categoryFilter,
               decoration: const InputDecoration(
                 labelText: 'Category',
                 border: OutlineInputBorder(),
