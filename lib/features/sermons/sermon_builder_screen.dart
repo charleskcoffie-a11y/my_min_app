@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+
 import '../../models/sermon.dart';
 import '../../repositories/sermon_repository.dart';
 import 'sermon_editor_screen.dart';

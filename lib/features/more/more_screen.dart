@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../devotion/devotion_screen.dart';
-import '../counselling/counselling_screen.dart';
-import '../counseling_notes/counseling_notes_screen.dart';
-import '../programs/program_manager_screen.dart';
-import '../pastoral_tasks/pastoral_tasks_screen.dart';
 import '../standing_orders/standing_orders_screen.dart';
 import '../sermons/sermon_builder_screen.dart';
 import '../reminders/reminders_screen.dart';
@@ -69,70 +64,10 @@ class MoreScreen extends StatelessWidget {
     final features = [
       _FeatureItem(
         icon: Icons.menu_book,
-        title: 'Devotion',
-        subtitle: 'Daily scripture',
-        color: const Color(0xFF7C3AED),
-        bgColor: const Color(0xFFEDE9FE),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => DevotionScreen(gemini: geminiService),
-          ),
-        ),
-      ),
-      _FeatureItem(
-        icon: Icons.chat_bubble,
-        title: 'Counselling',
-        subtitle: 'Pastoral care',
-        color: const Color(0xFFE91E63),
-        bgColor: const Color(0xFFFECDD3),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => CounsellingScreen(gemini: geminiService),
-          ),
-        ),
-      ),
-      _FeatureItem(
-        icon: Icons.note_outlined,
-        title: 'Notes',
-        subtitle: 'Counseling notes',
-        color: const Color(0xFF009688),
-        bgColor: const Color(0xFFB2DFDB),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const CounselingNotesScreen(),
-          ),
-        ),
-      ),
-      _FeatureItem(
-        icon: Icons.event,
-        title: 'Programs',
-        subtitle: 'Church programs',
-        color: const Color(0xFFFBC02D),
-        bgColor: const Color(0xFFFFECB3),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const ProgramManagerScreen(),
-          ),
-        ),
-      ),
-      _FeatureItem(
-        icon: Icons.assignment,
-        title: 'Pastoral Tasks',
-        subtitle: 'Ministry tasks',
-        color: const Color(0xFF6A1B9A),
-        bgColor: const Color(0xFFEDE9FE),
-        onTap: () => Navigator.pushNamed(context, '/pastoral-tasks'),
-      ),
-      _FeatureItem(
-        icon: Icons.book,
         title: 'Standing Orders',
-        subtitle: 'Church guidelines',
-        color: const Color(0xFFFDB022),
-        bgColor: const Color(0xFFFFF4E5),
+        subtitle: 'Recurring services',
+        color: const Color(0xFF1976D2),
+        bgColor: const Color(0xFFBBDEFB),
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
@@ -141,11 +76,11 @@ class MoreScreen extends StatelessWidget {
         ),
       ),
       _FeatureItem(
-        icon: Icons.edit_note,
+        icon: Icons.note_outlined,
         title: 'Sermon Builder',
-        subtitle: '12-point sermons',
+        subtitle: 'Compose sermons',
         color: const Color(0xFF1976D2),
-        bgColor: const Color(0xFFE3F2FD),
+        bgColor: const Color(0xFFBBDEFB),
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(

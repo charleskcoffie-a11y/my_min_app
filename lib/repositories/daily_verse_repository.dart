@@ -78,7 +78,7 @@ class DailyVerseRepository {
           .maybeSingle();
           
       if (similarResponse != null) {
-        return DailyVerse.fromMap(similarResponse as Map<String, dynamic>);
+        return DailyVerse.fromMap(similarResponse);
       }
     } catch (e) {
       print('Error fetching verse by reference: $e');
@@ -112,14 +112,10 @@ class DailyVerseRepository {
           .limit(1)
           .single();
 
-      if (response != null) {
-        return DailyVerse.fromMap(response as Map<String, dynamic>);
-      }
+      return DailyVerse.fromMap(response);
     } catch (e) {
       throw Exception('Failed to fetch random verse: $e');
     }
-
-    return null;
   }
 
   /// Get upcoming verses for the next N days
@@ -153,14 +149,10 @@ class DailyVerseRepository {
           .limit(1)
           .single();
 
-      if (response != null) {
-        return DailyVerse.fromMap(response as Map<String, dynamic>);
-      }
+      return DailyVerse.fromMap(response);
     } catch (e) {
       throw Exception('Failed to fetch verse by ID: $e');
     }
-
-    return null;
   }
 
   /// Insert a new verse (admin function)
@@ -172,7 +164,7 @@ class DailyVerseRepository {
           .select()
           .single();
 
-      return DailyVerse.fromMap(response as Map<String, dynamic>);
+      return DailyVerse.fromMap(response);
     } catch (e) {
       throw Exception('Failed to insert verse: $e');
     }

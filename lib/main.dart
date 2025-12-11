@@ -6,15 +6,9 @@ import 'core/gemini_service.dart';
 import 'core/notification_service.dart';
 
 import 'features/home/home_screen_redesigned.dart';
-import 'features/devotion/devotion_screen.dart';
-import 'features/counselling/counselling_screen.dart';
 import 'features/tasks/tasks_screen.dart';
-import 'features/pastoral_tasks/pastoral_tasks_screen.dart';
-import 'features/counseling_notes/counseling_notes_screen.dart';
 import 'features/hymns/hymns_screen.dart';
 import 'features/christian_calendar/christian_calendar_screen.dart';
-import 'features/schedule/schedule_screen.dart';
-import 'features/programs/program_manager_screen.dart';
 import 'features/more/more_screen.dart';
 import 'widgets/modern_bottom_nav.dart';
 import 'core/appointment_notification_service.dart';
@@ -49,8 +43,7 @@ class MinistryApp extends StatelessWidget {
       title: 'Ministry App',
       theme: AppTheme.lightTheme,
       routes: {
-        '/pastoral-tasks': (_) => const PastoralTasksScreen(),
-        '/counseling-notes': (_) => const CounselingNotesScreen(),
+        // Routes removed - use navigation in screens instead
       },
       home: MainTabs(geminiService: geminiService),
     );

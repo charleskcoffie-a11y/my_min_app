@@ -33,7 +33,7 @@ class _HomeScreenModernState extends State<HomeScreenModern> {
 
       // Select one based on day of month
       final index = (today.day - 1) % response.length;
-      return response[index] as Map<String, dynamic>;
+      return response[index];
     } catch (e) {
       debugPrint('Error fetching standing order: $e');
       return null;
@@ -141,7 +141,7 @@ class HeroHeader extends StatelessWidget {
     final now = DateTime.now();
     final dateFormatter = DateFormat('EEEE, MMMM d, yyyy');
     final formattedDate = dateFormatter.format(now);
-    final dayName = DateFormat('EEEE').format(now);
+    // final dayName = DateFormat('EEEE').format(now);
 
     return Container(
       decoration: BoxDecoration(

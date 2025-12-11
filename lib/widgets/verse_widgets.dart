@@ -204,7 +204,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
                 _animation.value - 0.3,
                 _animation.value,
                 _animation.value + 0.3,
-              ].map((e) => e.clamp(0.0, 1.0) as double).toList(),
+              ].map((e) => e.clamp(0.0, 1.0)).toList(),
             ),
           ),
         );

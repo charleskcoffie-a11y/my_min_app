@@ -34,7 +34,7 @@ class _HomeScreenRedesignedState extends State<HomeScreenRedesigned> {
       final response = await supabase.from('standing_orders').select('*');
       if (response.isEmpty) return null;
       final index = (today.day - 1) % response.length;
-      return response[index] as Map<String, dynamic>;
+      return response[index];
     } catch (e) {
       debugPrint('Error fetching standing order: $e');
       return null;
