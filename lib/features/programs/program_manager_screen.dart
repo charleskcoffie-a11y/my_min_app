@@ -382,7 +382,7 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
     if (lower.contains(RegExp(r'worship|choir|hymn|praise|song'))) {
       return Icons.music_note;
     } else if (lower.contains(RegExp(r'meeting|committee|board|council'))) {
-      return Icons.briefcase;
+      return Icons.work_outline;
     } else if (lower.contains(RegExp(r'prayer|vigil|fasting'))) {
       return Icons.favorite;
     } else if (lower.contains(RegExp(r'bible|study|class|training|seminar'))) {

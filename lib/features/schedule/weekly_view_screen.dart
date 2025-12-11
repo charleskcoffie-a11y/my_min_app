@@ -14,7 +14,7 @@ class WeeklyViewScreen extends StatefulWidget {
 
 class _WeeklyViewScreenState extends State<WeeklyViewScreen> {
   late DateTime _currentWeekStart;
-  late List<Appointment> _weekAppointments;
+  List<Appointment> _weekAppointments = [];
   bool _isLoading = false;
   final AppointmentRepository _repository = AppointmentRepository();
 

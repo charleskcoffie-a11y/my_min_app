@@ -206,28 +206,40 @@ class _HymnalScreenState extends State<HymnalScreen> {
   }
 
   Widget _buildHeader() {
+    // Get color based on active tab
+    final headerColor = _activeTab == 'MHB'
+        ? Colors.blue.shade700
+        : _activeTab == 'Canticles'
+            ? Colors.purple.shade700
+            : _activeTab == 'CAN/Local'
+                ? Colors.teal.shade700
+                : Colors.purple.shade700;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.purple.shade700, Colors.purple.shade500],
+          colors: [headerColor, headerColor.withValues(alpha: 0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Reduced from 20
       child: Row(
         children: [
-          const Icon(Icons.music_note, color: Colors.white, size: 32),
-          const SizedBox(width: 16),
+          const Icon(Icons.music_note, color: Colors.white, size: 28), // Reduced from 32
+          const SizedBox(width: 12), // Reduced from 16
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
+                  _activeTab == 'MHB' ? 'Hymns (MHB)' :
+                  _activeTab == 'Canticles' ? 'Canticles' :
+                  _activeTab == 'CAN/Local' ? 'CAN/Local Songs' :
                   'Canticles & Hymns',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 20, // Reduced from 28
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -235,7 +247,7 @@ class _HymnalScreenState extends State<HymnalScreen> {
                   'Methodist Church Ghana • ${_allSongs.length} Songs',
                   style: const TextStyle(
                     color: Colors.white70,
-                    fontSize: 14,
+                    fontSize: 12, // Reduced from 14
                   ),
                 ),
               ],
@@ -243,11 +255,12 @@ class _HymnalScreenState extends State<HymnalScreen> {
           ),
           ElevatedButton.icon(
             onPressed: _seedDatabase,
-            icon: const Icon(Icons.cloud_download),
-            label: const Text('Load Sample'),
+            icon: const Icon(Icons.cloud_download, size: 18),
+            label: const Text('Load'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: Colors.purple.shade700,
+              foregroundColor: headerColor,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
           ),
         ],
@@ -377,124 +390,107 @@ class _HymnalScreenState extends State<HymnalScreen> {
   }
 
   Widget _buildSongGrid() {
-    final isMobile = MediaQuery.of(context).size.width < 768;
-    final crossAxisCount = isMobile ? 1 : (MediaQuery.of(context).size.width < 1200 ? 2 : 3);
-
     // Sort by title if needed
     final displaySongs = _sortMode == 'title'
         ? (_filteredSongs.toList()..sort((a, b) => a.title.compareTo(b.title)))
         : _filteredSongs;
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(12),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: 0.85,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
+    return ListView.separated(
+      padding: const EdgeInsets.all(8),
       itemCount: displaySongs.length,
+      separatorBuilder: (context, index) => const Divider(height: 1, indent: 12, endIndent: 12),
       itemBuilder: (context, index) {
         final song = displaySongs[index];
-        return _buildSongCard(song);
+        return _buildSongListItem(song);
       },
     );
   }
 
-  Widget _buildSongCard(Song song) {
+  /// Build a compact list item for a song
+  /// Displays: Number | Title | Badge | Favorite button with minimal spacing
+  Widget _buildSongListItem(Song song) {
     final collection = song.collection;
     final (bgColor, badgeLabel) = _getCollectionColor(collection);
 
-    // Clean preview text
-    final previewText = _cleanLyrics(song.lyrics).split('\n').first;
-
     return GestureDetector(
       onTap: () => setState(() => _selectedSong = song),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [bgColor.withValues(alpha: 0.9), bgColor.withValues(alpha: 0.7)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          children: [
+            // Song number
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: bgColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                song.number.toString(),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: bgColor,
+                ),
+              ),
             ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with badge and favorite button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            const SizedBox(width: 12),
+            // Title - Expanded to take remaining space
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      borderRadius: BorderRadius.circular(6),
+                  Text(
+                    song.title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF1F2558),
                     ),
-                    child: Text(
-                      badgeLabel,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: bgColor,
-                      ),
-                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  GestureDetector(
-                    onTap: () => _toggleFavorite(song),
-                    child: Icon(
-                      song.isFavorite ? Icons.star : Icons.star_outline,
-                      color: Colors.white,
-                      size: 24,
+                  const SizedBox(height: 2),
+                  Text(
+                    song.code.isNotEmpty ? song.code : '',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF94A3B8),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-
-              // Number in large bold
-              Text(
-                song.number.toString(),
-                style: const TextStyle(
-                  fontSize: 32,
+            ),
+            const SizedBox(width: 8),
+            // Badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: bgColor.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                badgeLabel,
+                style: TextStyle(
+                  fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: bgColor,
                 ),
               ),
-              const SizedBox(height: 8),
-
-              // Title
-              Text(
-                song.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(width: 8),
+            // Favorite button
+            GestureDetector(
+              onTap: () => _toggleFavorite(song),
+              child: Icon(
+                song.isFavorite ? Icons.star : Icons.star_outline,
+                color: song.isFavorite ? Colors.amber : Colors.grey,
+                size: 20,
               ),
-              const SizedBox(height: 4),
-
-              // Preview lyrics
-              Expanded(
-                child: Text(
-                  previewText.isEmpty ? 'No lyrics' : previewText,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.85),
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -635,6 +631,7 @@ class _HymnalScreenState extends State<HymnalScreen> {
               onPressed: () => setState(() => _selectedSong = null),
             ),
             title: const Text('Reading View'),
+            titleSpacing: 4, // Reduced spacing
             actions: [
               // Font size controls
               IconButton(
@@ -646,11 +643,11 @@ class _HymnalScreenState extends State<HymnalScreen> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 4), // Reduced from 8
                 child: Center(
                   child: Text(
                     _fontSize.toStringAsFixed(0),
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 12), // Reduced from 14
                   ),
                 ),
               ),
@@ -672,14 +669,26 @@ class _HymnalScreenState extends State<HymnalScreen> {
               ),
             ],
             pinned: true,
-            expandedHeight: 200,
+            expandedHeight: 120,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [bgColor, bgColor.withValues(alpha: 0.7)],
+                    colors: [bgColor, bgColor.withValues(alpha: 0.6)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        bgColor.withValues(alpha: 0.9),
+                        bgColor.withValues(alpha: 0.7)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
                 ),
               ),
@@ -688,7 +697,7 @@ class _HymnalScreenState extends State<HymnalScreen> {
           // Content
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(16), // Reduced from 24
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -720,12 +729,12 @@ class _HymnalScreenState extends State<HymnalScreen> {
                     song.title,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: 22, // Reduced from 28
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Georgia',
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6), // Reduced from 8
 
                   // Author
                   if (song.author != null && song.author!.isNotEmpty)
@@ -746,11 +755,11 @@ class _HymnalScreenState extends State<HymnalScreen> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: _fontSize,
-                      height: 1.6,
+                      height: 1.3, // Reduced from 1.6 to tighten spacing
                       color: Colors.grey.shade900,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24), // Reduced from 32
 
                   // Footer
                   if (song.copyright != null && song.copyright!.isNotEmpty)

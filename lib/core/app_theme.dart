@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Color palette
-  static const Color primaryColor = Color(0xFF6A1B9A);
-  static const Color primaryDark = Color(0xFF2D1B3D);
+  // Color palette - Modern and stylish
+  static const Color primaryColor = Color(0xFF6A1B9A); // Purple
+  static const Color primaryDark = Color(0xFF1F2558); // Deep navy/purple for titles
   static const Color accentColor = Color(0xFF7B1FA2);
   static const Color successColor = Color(0xFF4CAF50);
   static const Color warningColor = Color(0xFFFFC107);
   static const Color errorColor = Color(0xFFF44336);
   static const Color infoColor = Color(0xFF2196F3);
-  static const Color backgroundColor = Color(0xFFF7F2FA);
+  static const Color backgroundColor = Color(0xFFF9F7FD); // Very light off-white/lavender
   static const Color surfaceColor = Colors.white;
-  static const Color textPrimary = Color(0xFF2D1B3D);
-  static const Color textSecondary = Color(0xFF5A4A7A);
+  static const Color textPrimary = Color(0xFF1F2558); // Deep navy for headings
+  static const Color textSecondary = Color(0xFF64748B); // Muted grey for subtitles
   static const Color borderColor = Color(0xFFE0D5F4);
 
   // Spacing constants
@@ -24,13 +25,13 @@ class AppTheme {
   static const double spacing24 = 24.0;
   static const double spacing32 = 32.0;
 
-  // Border radius
-  static const double radiusSmall = 8.0;
-  static const double radiusMedium = 12.0;
-  static const double radiusLarge = 16.0;
+  // Border radius - Modern rounded corners
+  static const double radiusSmall = 12.0;
+  static const double radiusMedium = 16.0;
+  static const double radiusLarge = 20.0;
 
   // Elevation
-  static const double elevationSmall = 1.5;
+  static const double elevationSmall = 2.0;
   static const double elevationMedium = 4.0;
   static const double elevationLarge = 8.0;
 
@@ -41,113 +42,85 @@ class AppTheme {
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: backgroundColor,
-    appBarTheme: const AppBarTheme(
+    
+    // Apply Poppins font globally
+    textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+      // Headings - Bold and prominent
+      headlineLarge: GoogleFonts.poppins(
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+        color: textPrimary,
+      ),
+      headlineMedium: GoogleFonts.poppins(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: textPrimary,
+      ),
+      headlineSmall: GoogleFonts.poppins(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      ),
+      // Titles
+      titleLarge: GoogleFonts.poppins(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      ),
+      titleMedium: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      ),
+      titleSmall: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textPrimary,
+      ),
+      // Body text
+      bodyLarge: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        color: textPrimary,
+      ),
+      bodyMedium: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: textSecondary,
+      ),
+      bodySmall: GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+        color: textSecondary,
+      ),
+      // Labels
+      labelLarge: GoogleFonts.poppins(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textPrimary,
+      ),
+      labelMedium: GoogleFonts.poppins(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: textPrimary,
+      ),
+      labelSmall: GoogleFonts.poppins(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: textSecondary,
+      ),
+    ),
+    
+    appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: TextStyle(
+      titleTextStyle: GoogleFonts.poppins(
         fontSize: 22,
         fontWeight: FontWeight.w600,
         color: primaryDark,
       ),
       iconTheme: IconThemeData(color: primaryDark),
-    ),
-    textTheme: const TextTheme(
-      // Display styles
-      displayLarge: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.w700,
-        height: 1.2,
-        color: primaryDark,
-      ),
-      displayMedium: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.w600,
-        height: 1.2,
-        color: primaryDark,
-      ),
-      displaySmall: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        height: 1.2,
-        color: primaryDark,
-      ),
-      // Headline styles
-      headlineLarge: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        height: 1.25,
-        color: primaryDark,
-      ),
-      headlineMedium: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        height: 1.3,
-        color: primaryDark,
-      ),
-      headlineSmall: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        height: 1.3,
-        color: primaryDark,
-      ),
-      // Title styles
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        height: 1.4,
-        color: primaryDark,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        height: 1.4,
-        color: primaryDark,
-      ),
-      titleSmall: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        height: 1.4,
-        color: primaryDark,
-      ),
-      // Body styles
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        height: 1.5,
-        color: textPrimary,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        height: 1.4,
-        color: textPrimary,
-      ),
-      bodySmall: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        height: 1.4,
-        color: textSecondary,
-      ),
-      // Label styles
-      labelLarge: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        height: 1.3,
-        color: primaryDark,
-      ),
-      labelMedium: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        height: 1.3,
-        color: primaryDark,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 11,
-        fontWeight: FontWeight.w600,
-        height: 1.3,
-        color: textSecondary,
-      ),
     ),
     cardTheme: const CardThemeData(
       color: surfaceColor,

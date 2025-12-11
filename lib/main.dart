@@ -5,7 +5,7 @@ import 'core/app_theme.dart';
 import 'core/gemini_service.dart';
 import 'core/notification_service.dart';
 
-import 'features/home/home_screen_modern.dart';
+import 'features/home/home_screen_redesigned.dart';
 import 'features/devotion/devotion_screen.dart';
 import 'features/counselling/counselling_screen.dart';
 import 'features/tasks/tasks_screen.dart';
@@ -15,6 +15,7 @@ import 'features/hymns/hymns_screen.dart';
 import 'features/christian_calendar/christian_calendar_screen.dart';
 import 'features/schedule/schedule_screen.dart';
 import 'features/programs/program_manager_screen.dart';
+import 'widgets/modern_bottom_nav.dart';
 import 'core/appointment_notification_service.dart';
 import 'secrets.dart';
 
@@ -70,7 +71,7 @@ class _MainTabsState extends State<MainTabs> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      const HomeScreenModern(),
+      const HomeScreenRedesigned(),
       DevotionScreen(gemini: widget.geminiService),
       CounsellingScreen(gemini: widget.geminiService),
       TasksScreen(gemini: widget.geminiService),
@@ -83,21 +84,9 @@ class _MainTabsState extends State<MainTabs> {
 
     return Scaffold(
       body: screens[_index],
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: ModernBottomNav(
         currentIndex: _index,
-        type: BottomNavigationBarType.fixed,
         onTap: (i) => setState(() => _index = i),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Devotion'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Counsel'),
-          BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Tasks'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Schedule'),
-          BottomNavigationBarItem(icon: Icon(Icons.note_outlined), label: 'Notes'),
-          BottomNavigationBarItem(icon: Icon(Icons.music_note), label: 'Hymns'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Calendar'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Programs'),
-        ],
       ),
     );
   }

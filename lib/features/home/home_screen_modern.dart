@@ -85,7 +85,7 @@ class _HomeScreenModernState extends State<HomeScreenModern> {
             const Text(
               'Quick Access',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1F2A6B),
               ),
@@ -219,7 +219,7 @@ class HeroHeader extends StatelessWidget {
           Text(
             'Today — $formattedDate',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 16,
               color: Colors.white.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
             ),
@@ -228,7 +228,7 @@ class HeroHeader extends StatelessWidget {
           Text(
             'Here are your tools for ministry, study, and organization.',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 17,
               color: Colors.white.withValues(alpha: 0.9),
               height: 1.4,
             ),
@@ -289,7 +289,7 @@ class StandingOrderOfTheDayCard extends StatelessWidget {
                 Text(
                   'Standing Order of the Day',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFF1F2A6B),
                     letterSpacing: 0.5,
@@ -300,7 +300,7 @@ class StandingOrderOfTheDayCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF1F2A6B),
                   ),
@@ -312,7 +312,7 @@ class StandingOrderOfTheDayCard extends StatelessWidget {
                 Text(
                   truncatedContent,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 16,
                     color: Colors.grey.shade700,
                     height: 1.4,
                   ),
@@ -342,7 +342,7 @@ class StandingOrderOfTheDayCard extends StatelessWidget {
                     child: const Text(
                       'Read More',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -362,7 +362,7 @@ class StandingOrderOfTheDayCard extends StatelessWidget {
             ),
             child: Center(
               child: Icon(
-                Icons.scroll,
+                Icons.menu_book,
                 color: const Color(0xFFFDB022),
                 size: 40,
               ),
@@ -429,7 +429,7 @@ class QuickAccessGrid extends StatelessWidget {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.9,
+        childAspectRatio: 1.1,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
@@ -508,17 +508,17 @@ class _QuickAccessCardState extends State<QuickAccessCard> {
               children: [
                 // Icon in colored box
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: widget.data.color,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
                     child: Icon(
                       widget.data.icon,
                       color: widget.data.iconColor,
-                      size: 32,
+                      size: 28,
                     ),
                   ),
                 ),
@@ -527,7 +527,7 @@ class _QuickAccessCardState extends State<QuickAccessCard> {
                 Text(
                   widget.data.title,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF1F2A6B),
                   ),
@@ -538,7 +538,7 @@ class _QuickAccessCardState extends State<QuickAccessCard> {
                 Text(
                   widget.data.subtitle,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     color: Colors.grey.shade600,
                     height: 1.3,
                   ),
