@@ -33,17 +33,13 @@ class ModernBottomNav extends StatelessWidget {
     const Color inactiveColor = Color(0xFF94A3B8); // Grey for unselected
     const Color backgroundColor = Colors.white;
 
-    // Navigation items
+    // Navigation items - Simplified to 5 main tabs
     final items = [
       _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-      _NavItem(icon: Icons.menu_book_outlined, activeIcon: Icons.menu_book, label: 'Devotion'),
-      _NavItem(icon: Icons.chat_bubble_outline, activeIcon: Icons.chat_bubble, label: 'Counsel'),
-      _NavItem(icon: Icons.check_circle_outline, activeIcon: Icons.check_circle, label: 'Tasks'),
-      _NavItem(icon: Icons.calendar_today_outlined, activeIcon: Icons.calendar_today, label: 'Schedule'),
-      _NavItem(icon: Icons.note_outlined, activeIcon: Icons.note, label: 'Notes'),
       _NavItem(icon: Icons.music_note_outlined, activeIcon: Icons.music_note, label: 'Hymns'),
       _NavItem(icon: Icons.calendar_month_outlined, activeIcon: Icons.calendar_month, label: 'Calendar'),
-      _NavItem(icon: Icons.event_outlined, activeIcon: Icons.event, label: 'Programs'),
+      _NavItem(icon: Icons.check_circle_outline, activeIcon: Icons.check_circle, label: 'Tasks'),
+      _NavItem(icon: Icons.grid_view_outlined, activeIcon: Icons.grid_view, label: 'More'),
     ];
 
     return Container(
@@ -81,11 +77,7 @@ class ModernBottomNav extends StatelessWidget {
             fontWeight: FontWeight.w500,
             fontSize: 11,
           ),
-          items: items.asMap().entries.map((entry) {
-            final index = entry.key;
-            final item = entry.value;
-            final isSelected = currentIndex == index;
-
+          items: items.map((item) {
             return BottomNavigationBarItem(
               icon: _NavIcon(
                 icon: item.icon,

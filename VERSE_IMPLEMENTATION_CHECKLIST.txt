@@ -1,0 +1,221 @@
+# Verse of the Day Implementation Checklist
+
+## Phase 1: Setup ✓
+- [ ] Review all created files in this folder
+- [ ] Read VERSE_OF_THE_DAY_README.md for complete overview
+- [ ] Read VERSE_OF_THE_DAY_GUIDE.txt for step-by-step instructions
+- [ ] Review VERSE_INTEGRATION_EXAMPLES.dart for code snippets
+
+## Phase 2: Supabase Setup
+- [ ] Create `daily_verses` table in Supabase using provided SQL
+- [ ] Verify table columns match schema (id, date, reference, translation, text, image_url, created_at)
+- [ ] Insert at least 3 sample verses (with or without dates)
+- [ ] Test Supabase queries manually in console
+
+## Phase 3: Android Configuration
+- [ ] Add permissions to `android/app/src/main/AndroidManifest.xml`:
+  ```xml
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  ```
+- [ ] Verify Android SDK version is 21 or higher
+
+## Phase 4: iOS Configuration  
+- [ ] Update `ios/Podfile` to target iOS 11.0 or higher
+- [ ] Add to `ios/Runner/Info.plist`:
+  ```xml
+  <key>UILocalNotificationTimeZoneFormat</key>
+  <string>HH:mm:ss z</string>
+  ```
+
+## Phase 5: Code Integration
+- [ ] Update `lib/main.dart`:
+  ```dart
+  import 'core/notification_service_verse.dart';
+  
+  // Add to main():
+  await setupDailyVerseNotification(
+    notificationTime: const TimeOfDay(hour: 6, minute: 0),
+    notificationHour: 6,
+    notificationMinute: 0,
+  );
+  ```
+
+- [ ] Add routes to MaterialApp:
+  ```dart
+  routes: {
+    '/verse-of-the-day': (_) => const DevotionVerseScreen(),
+    '/verse': (context) {
+      final verseId = ModalRoute.of(context)?.settings.arguments as String?;
+      return DevotionVerseScreen(verseId: verseId);
+    },
+  }
+  ```
+
+## Phase 6: Navigation Integration
+- [ ] Add "Verse of the Day" button to:
+  - [ ] Home screen quick access
+  - [ ] Navigation drawer (if you have one)
+  - [ ] Devotion/Worship section of your app
+  - [ ] Bottom navigation (optional, can replace a less-used tab)
+
+- [ ] Example code:
+  ```dart
+  ElevatedButton.icon(
+    onPressed: () => Navigator.pushNamed(context, '/verse-of-the-day'),
+    icon: const Icon(Icons.book),
+    label: const Text('Verse of the Day'),
+  )
+  ```
+
+## Phase 7: Widget Integration (Optional)
+- [ ] Add `VerseOfTheDayCard` to home screen:
+  ```dart
+  VerseOfTheDayCard(
+    onTap: () => Navigator.pushNamed(context, '/verse-of-the-day'),
+    showDetails: true,
+  )
+  ```
+
+- [ ] Add `VerseCarousel` for upcoming verses (optional):
+  ```dart
+  VerseCarousel(
+    onVerseSelected: () => Navigator.pushNamed(context, '/verse-of-the-day'),
+  )
+  ```
+
+## Phase 8: Testing
+- [ ] Test notification initialization:
+  - [ ] App starts without crashes
+  - [ ] Notification service initializes silently
+  
+- [ ] Test verse loading:
+  - [ ] Open DevotionVerseScreen
+  - [ ] Verify verse displays correctly
+  - [ ] Check image loads (if URL provided)
+  - [ ] Test with missing image
+  
+- [ ] Test notifications:
+  - [ ] Send test notification: `NotificationService().showTestNotification(...)`
+  - [ ] Tap notification and verify it opens DevotionVerseScreen
+  - [ ] Wait for scheduled notification at morning time
+  
+- [ ] Test on both Android and iOS (if available)
+
+## Phase 9: Customization
+- [ ] Change notification time if desired
+- [ ] Add background images to verses in Supabase
+- [ ] Populate with your actual Bible verses
+- [ ] Test notification permission prompts on fresh install
+
+## Phase 10: Future Enhancements (Optional)
+- [ ] Add user settings page for notification time
+- [ ] Implement SharedPreferences for user preferences
+- [ ] Add notification enable/disable toggle
+- [ ] Create admin panel to add/manage verses
+- [ ] Add weekly or monthly verse selection options
+- [ ] Implement verse sharing feature
+- [ ] Add favorite verses functionality
+- [ ] Create verse search feature
+
+---
+
+## 📋 File Structure
+```
+lib/
+├── models/
+│   ├── daily_verse.dart ✨ NEW
+│   └── ... (existing)
+├── repositories/
+│   ├── daily_verse_repository.dart ✨ NEW
+│   └── ... (existing)
+├── core/
+│   ├── notification_service_verse.dart ✨ NEW
+│   └── ... (existing)
+├── features/
+│   ├── devotion/
+│   │   ├── devotion_verse_screen.dart ✨ NEW
+│   │   └── ... (existing)
+│   └── ... (existing)
+├── widgets/
+│   ├── verse_widgets.dart ✨ NEW
+│   └── ... (existing)
+└── main.dart (UPDATED)
+
+Documentation:
+├── VERSE_OF_THE_DAY_README.md ✨ NEW
+├── VERSE_OF_THE_DAY_GUIDE.txt ✨ NEW
+├── VERSE_INTEGRATION_EXAMPLES.dart ✨ NEW
+└── VERSE_IMPLEMENTATION_CHECKLIST.txt ✨ NEW (this file)
+```
+
+---
+
+## 🎯 Quick Reference
+
+### Import statements you'll need:
+```dart
+import 'package:my_min_app/models/daily_verse.dart';
+import 'package:my_min_app/repositories/daily_verse_repository.dart';
+import 'package:my_min_app/core/notification_service_verse.dart';
+import 'package:my_min_app/features/devotion/devotion_verse_screen.dart';
+import 'package:my_min_app/widgets/verse_widgets.dart';
+```
+
+### Key classes:
+- `DailyVerse` - Data model
+- `DailyVerseRepository` - Supabase queries
+- `NotificationService` - Scheduling notifications
+- `DevotionVerseScreen` - Main UI
+- `VerseOfTheDayCard` - Quick access widget
+- `VerseCarousel` - Upcoming verses widget
+
+### Key methods:
+- `DailyVerseRepository().getVerseForToday()`
+- `NotificationService().scheduleDailyVerseNotification(...)`
+- `setupDailyVerseNotification()` - Helper for main()
+
+---
+
+## 🔍 Verification Steps
+
+After implementation, verify:
+- [ ] App compiles without errors
+- [ ] No unused imports or variables
+- [ ] Verse loads when app starts
+- [ ] Notification appears at scheduled time
+- [ ] Tapping notification opens verse screen
+- [ ] UI looks good on mobile screen sizes
+- [ ] No console errors during operation
+
+---
+
+## 📞 Need Help?
+
+If something doesn't work:
+
+1. Check VERSE_OF_THE_DAY_GUIDE.txt for detailed instructions
+2. Review VERSE_INTEGRATION_EXAMPLES.dart for code samples
+3. Check Supabase console that daily_verses table exists
+4. Verify notification permissions are granted
+5. Check logcat (Android) or Console (iOS) for error messages
+6. Try the test notification: `NotificationService().showTestNotification(...)`
+
+---
+
+## ✅ Final Checklist
+
+Before marking as complete:
+- [ ] All files created successfully
+- [ ] Main.dart updated with notification setup
+- [ ] Routes added to navigation
+- [ ] Navigation button added to UI
+- [ ] At least one verse in Supabase
+- [ ] App builds and runs
+- [ ] DevotionVerseScreen opens and displays verse
+- [ ] Notification scheduled and appears on time
+- [ ] User can access verse from notification tap
+
+**Status: READY TO IMPLEMENT** ✨
+
+Good luck! The complete Verse of the Day feature is ready to integrate. Follow the step-by-step guide and you'll have it working in 30 minutes! 🎉

@@ -15,6 +15,7 @@ import 'features/hymns/hymns_screen.dart';
 import 'features/christian_calendar/christian_calendar_screen.dart';
 import 'features/schedule/schedule_screen.dart';
 import 'features/programs/program_manager_screen.dart';
+import 'features/more/more_screen.dart';
 import 'widgets/modern_bottom_nav.dart';
 import 'core/appointment_notification_service.dart';
 import 'secrets.dart';
@@ -72,14 +73,10 @@ class _MainTabsState extends State<MainTabs> {
   Widget build(BuildContext context) {
     final screens = [
       const HomeScreenRedesigned(),
-      DevotionScreen(gemini: widget.geminiService),
-      CounsellingScreen(gemini: widget.geminiService),
-      TasksScreen(gemini: widget.geminiService),
-      const ScheduleScreen(),
-      const CounselingNotesScreen(),
       const HymnsScreen(),
       const ChristianCalendarScreen(),
-      const ProgramManagerScreen(),
+      TasksScreen(gemini: widget.geminiService),
+      MoreScreen(geminiService: widget.geminiService),
     ];
 
     return Scaffold(

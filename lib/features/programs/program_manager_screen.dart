@@ -382,7 +382,7 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
     if (lower.contains(RegExp(r'worship|choir|hymn|praise|song'))) {
       return Icons.music_note;
     } else if (lower.contains(RegExp(r'meeting|committee|board|council'))) {
-      return Icons.work_outline;
+      return Icons.business;
     } else if (lower.contains(RegExp(r'prayer|vigil|fasting'))) {
       return Icons.favorite;
     } else if (lower.contains(RegExp(r'bible|study|class|training|seminar'))) {
@@ -724,56 +724,64 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _filterVenue.isEmpty ? null : _filterVenue,
-                        hint: const Text('Select Venue'),
-                        items: [
-                          const DropdownMenuItem(
-                            value: '',
-                            child: Text('All Venues'),
-                          ),
-                          ..._uniqueVenues.map((v) => DropdownMenuItem(
-                            value: v,
-                            child: Text(v),
-                          )),
-                        ],
-                        onChanged: (value) =>
-                            setState(() => _filterVenue = value ?? ''),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 500),
+                        child: DropdownButtonFormField<String>(
+                          value: _filterVenue.isEmpty ? null : _filterVenue,
+                          hint: const Text('Select Venue'),
+                          items: [
+                            const DropdownMenuItem(
+                              value: '',
+                              child: Text('All Venues'),
+                            ),
+                            ..._uniqueVenues.map((v) => DropdownMenuItem(
+                              value: v,
+                              child: Text(v, overflow: TextOverflow.ellipsis),
+                            )),
+                          ],
+                          onChanged: (value) =>
+                              setState(() => _filterVenue = value ?? ''),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _filterLead.isEmpty ? null : _filterLead,
-                        hint: const Text('Select Lead'),
-                        items: [
-                          const DropdownMenuItem(
-                            value: '',
-                            child: Text('All Leads'),
-                          ),
-                          ..._uniqueLeads.map((l) => DropdownMenuItem(
-                            value: l,
-                            child: Text(l),
-                          )),
-                        ],
-                        onChanged: (value) =>
-                            setState(() => _filterLead = value ?? ''),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 500),
+                        child: DropdownButtonFormField<String>(
+                          value: _filterLead.isEmpty ? null : _filterLead,
+                          hint: const Text('Select Lead'),
+                          items: [
+                            const DropdownMenuItem(
+                              value: '',
+                              child: Text('All Leads'),
+                            ),
+                            ..._uniqueLeads.map((l) => DropdownMenuItem(
+                              value: l,
+                              child: Text(l, overflow: TextOverflow.ellipsis),
+                            )),
+                          ],
+                          onChanged: (value) =>
+                              setState(() => _filterLead = value ?? ''),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                           ),
                         ),
                       ),
@@ -890,123 +898,149 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      child: Row(
-        children: [
-          // Date block
-          Container(
-            width: 70,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.blue.shade200),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  program.date.split('-')[2], // Day
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2A6B),
-                  ),
-                ),
-                Text(
-                  dayName,
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 16),
-
-          // Activity with icon
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      _getActivityIcon(program.activityDescription),
-                      size: 20,
-                      color: Colors.blue.shade600,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top row: Date and activity
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Date block
+                  Container(
+                    width: 60,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.blue.shade200),
                     ),
-                    const SizedBox(width: 8),
+                    child: Column(
+                      children: [
+                        Text(
+                          program.date.split('-')[2], // Day
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1F2A6B),
+                          ),
+                        ),
+                        Text(
+                          dayName,
+                          style: const TextStyle(fontSize: 10, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+
+                  // Activity with icon
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              _getActivityIcon(program.activityDescription),
+                              size: 18,
+                              color: Colors.blue.shade600,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                program.activityDescription,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (program.lead != null && program.lead!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              'Lead: ${program.lead}',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              // Bottom row: Venue and actions
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Venue
+                  if (program.venue != null && program.venue!.isNotEmpty)
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(Icons.location_on,
+                              size: 14, color: Colors.grey.shade600),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              program.venue!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade700,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
                     Expanded(
                       child: Text(
-                        program.activityDescription,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        '—',
+                        style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
                       ),
                     ),
-                  ],
-                ),
-                if (program.lead != null && program.lead!.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      'Lead: ${program.lead}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
 
-          // Venue
-          SizedBox(
-            width: 120,
-            child: program.venue != null && program.venue!.isNotEmpty
-                ? Row(
+                  // Edit/Delete buttons
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.location_on,
-                          size: 16, color: Colors.grey.shade600),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          program.venue!,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade700,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      IconButton(
+                        onPressed: () => _openEditor(program: program),
+                        icon: const Icon(Icons.edit, size: 16),
+                        tooltip: 'Edit',
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(),
+                      ),
+                      IconButton(
+                        onPressed: () => _deleteProgram(program),
+                        icon: const Icon(Icons.delete, size: 16),
+                        color: Colors.red.shade600,
+                        tooltip: 'Delete',
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(),
                       ),
                     ],
-                  )
-                : Text(
-                    '—',
-                    style: TextStyle(color: Colors.grey.shade400),
                   ),
+                ],
+              ),
+            ],
           ),
-
-          // Edit/Delete buttons
-          SizedBox(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () => _openEditor(program: program),
-                  icon: const Icon(Icons.edit, size: 18),
-                  tooltip: 'Edit',
-                ),
-                IconButton(
-                  onPressed: () => _deleteProgram(program),
-                  icon: const Icon(Icons.delete, size: 18),
-                  color: Colors.red.shade600,
-                  tooltip: 'Delete',
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

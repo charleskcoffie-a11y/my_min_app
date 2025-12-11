@@ -1,0 +1,251 @@
+/// VERSE OF THE DAY FEATURE - INTEGRATION GUIDE
+/// 
+/// This file explains how to integrate the Verse of the Day feature into your app.
+///
+/// FILES CREATED:
+/// 1. lib/models/daily_verse.dart - DailyVerse data model
+/// 2. lib/repositories/daily_verse_repository.dart - Supabase integration
+/// 3. lib/core/notification_service_verse.dart - Notification scheduling
+/// 4. lib/features/devotion/devotion_verse_screen.dart - UI screen
+/// 5. This integration guide (you're reading it!)
+///
+/// ============================================================================
+/// STEP 1: Create the Supabase Table
+/// ============================================================================
+/// 
+/// In your Supabase dashboard, go to SQL Editor and run this script:
+///
+/// SQL:
+/// ```sql
+/// -- Enable UUID generation in Supabase
+/// create extension if not exists "uuid-ossp";
+///
+/// -- Create the daily_verses table
+/// create table if not exists daily_verses (
+///   id uuid primary key default uuid_generate_v4(),
+///
+///   -- Optional specific date for Verse of the Day
+///   date date,
+///
+///   -- Required fields
+///   reference text not null,      -- Example: 'Proverbs 18:12'
+///   translation text not null default 'NLT',
+///   text text not null,           -- Full verse text
+///
+///   -- Background image URL
+///   image_url text,
+///
+///   -- Automatic timestamp
+///   created_at timestamptz default now()
+/// );
+///
+/// -- Enable Row Level Security
+/// alter table daily_verses enable row level security;
+///
+/// -- Allow public read access (safe for Bible verses)
+/// create policy "Public read access on daily_verses"
+///   on daily_verses
+///   for select
+///   using (true);
+///
+/// -- Allow insert (for development; you can restrict later)
+/// create policy "Allow insert for development"
+///   on daily_verses
+///   for insert
+///   with check (true);
+/// ```
+///
+/// This will:
+/// 1. Enable UUID support
+/// 2. Create the daily_verses table with all fields
+/// 3. Enable Row Level Security (RLS)
+/// 4. Allow public read access to verses
+/// 5. Allow inserts for adding new verses
+///
+/// Table Fields:
+/// - id: UUID primary key (auto-generated)
+/// - date: Optional specific date (null is fine if using rotation)
+/// - reference: Bible reference like "Proverbs 18:12" (REQUIRED)
+/// - translation: Version like "NLT" or "KJV" (REQUIRED, defaults to 'NLT')
+/// - text: Full verse text (REQUIRED)
+/// - image_url: Background image URL (optional, can be null)
+/// - created_at: When it was added (auto-generated)
+///
+/// ============================================================================
+/// STEP 2: Update pubspec.yaml (Already Done)
+/// ============================================================================
+/// 
+/// Your pubspec.yaml already includes:
+/// - flutter_local_notifications: ^17.2.3
+/// - timezone: ^0.9.0
+/// - google_fonts: ^6.1.0
+///
+/// No additional packages needed!
+///
+/// ============================================================================
+/// STEP 3: Android Configuration
+/// ============================================================================
+/// 
+/// Add to android/app/src/main/AndroidManifest.xml:
+///
+/// ```xml
+/// <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+/// <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+/// ```
+///
+/// ============================================================================
+/// STEP 4: iOS Configuration
+/// ============================================================================
+/// 
+/// In ios/Podfile, ensure:
+/// ```
+/// platform :ios, '11.0'
+/// ```
+///
+/// Add to ios/Runner/Info.plist:
+/// ```xml
+/// <key>UILocalNotificationTimeZoneFormat</key>
+/// <string>HH:mm:ss z</string>
+/// ```
+///
+/// ============================================================================
+/// STEP 5: Integrate into main.dart
+/// ============================================================================
+/// 
+/// In your main() function, add the notification setup:
+///
+/// ```dart
+/// import 'core/notification_service_verse.dart';
+///
+/// void main() async {
+///   WidgetsFlutterBinding.ensureInitialized();
+///
+///   await Supabase.initialize(
+///     url: supabaseUrl,
+///     anonKey: supabaseAnonKey,
+///   );
+///
+///   // Initialize and schedule daily verse notification
+///   await setupDailyVerseNotification(
+///     notificationTime: const TimeOfDay(hour: 6, minute: 0),
+///     notificationHour: 6,
+///     notificationMinute: 0,
+///   );
+///
+///   runApp(const MinistryApp());
+/// }
+/// ```
+///
+/// ============================================================================
+/// STEP 6: Add Route to Navigation
+/// ============================================================================
+/// 
+/// In your main.dart or wherever you define routes:
+///
+/// ```dart
+/// import 'features/devotion/devotion_verse_screen.dart';
+///
+/// // In MaterialApp routes:
+/// routes: {
+///   '/verse-of-the-day': (_) => const DevotionVerseScreen(),
+///   '/verse': (context) {
+///     // If coming from a notification, extract verseId
+///     final verseId = ModalRoute.of(context)?.settings.arguments as String?;
+///     return DevotionVerseScreen(verseId: verseId);
+///   },
+/// }
+/// ```
+///
+/// ============================================================================
+/// STEP 7: Add to Bottom Navigation or Menu (Optional)
+/// ============================================================================
+/// 
+/// Add a button/tab to access the Verse of the Day screen:
+///
+/// ```dart
+/// // In your bottom nav or menu
+/// ElevatedButton(
+///   onPressed: () => Navigator.pushNamed(context, '/verse-of-the-day'),
+///   child: const Text('Verse of the Day'),
+/// )
+/// ```
+///
+/// ============================================================================
+/// STEP 8: Populate with Sample Verses (Optional)
+/// ============================================================================
+/// 
+/// Insert some sample verses into your daily_verses table.
+/// You can do this in Supabase dashboard directly:
+///
+/// Example:
+/// ```json
+/// {
+///   "date": "2025-12-11",
+///   "reference": "Proverbs 18:12",
+///   "translation": "NLT",
+///   "text": "Haughtiness goes before destruction; humility precedes honor.",
+///   "image_url": "https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=800"
+/// }
+/// ```
+///
+/// ============================================================================
+/// CUSTOMIZATION
+/// ============================================================================
+/// 
+/// 1. Change notification time:
+///    In main.dart, change the time in setupDailyVerseNotification()
+///    Example: TimeOfDay(hour: 7, minute: 30) for 7:30 AM
+///
+/// 2. Add user preferences for notification time:
+///    Modify notification_service_verse.dart to accept user settings
+///    Store in SharedPreferences or Supabase user profile
+///
+/// 3. Change notification text style:
+///    Edit getDailyVerseNotification() in notification_service_verse.dart
+///
+/// 4. Add more images:
+///    Upload images to Supabase Storage and use the public URL in image_url
+///
+/// 5. Weekly/Monthly verses:
+///    Modify DailyVerseRepository.getVerseForToday() logic
+///
+/// ============================================================================
+/// TESTING
+/// ============================================================================
+/// 
+/// 1. Test notification service:
+///    ```dart
+///    final notificationService = NotificationService();
+///    await notificationService.init();
+///    final verse = await DailyVerseRepository().getVerseForToday();
+///    if (verse != null) {
+///      await notificationService.showTestNotification(verse: verse);
+///    }
+///    ```
+///
+/// 2. Test screen directly:
+///    Navigate to DevotionVerseScreen from your app
+///
+/// 3. Test with specific verse:
+///    Pass verseId to DevotionVerseScreen(verseId: 'some-uuid')
+///
+/// ============================================================================
+/// TROUBLESHOOTING
+/// ============================================================================
+/// 
+/// Issue: Notifications not appearing
+/// - Check Android/iOS permissions are granted
+/// - Verify NotificationService.init() is called before scheduling
+/// - Check that timezone is initialized (tz_data.initializeTimeZones())
+///
+/// Issue: Verse not loading
+/// - Check daily_verses table has data
+/// - Verify Supabase connection and credentials
+/// - Check DailyVerseRepository error messages
+///
+/// Issue: Images not loading
+/// - Verify image URLs are public and accessible
+/// - Check network/internet connection
+/// - Use placeholder images while loading
+///
+/// ============================================================================
