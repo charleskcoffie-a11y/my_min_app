@@ -45,6 +45,10 @@ class CounselingSession {
     );
   }
 
+  /// Create from map (alias for fromJson)
+  factory CounselingSession.fromMap(Map<String, dynamic> map) =>
+      CounselingSession.fromJson(map);
+
   /// Convert to Supabase JSON for insert/update
   Map<String, dynamic> toJson() {
     return {
@@ -59,6 +63,9 @@ class CounselingSession {
       'status': status,
     };
   }
+
+  /// Convert to map (alias for toJson)
+  Map<String, dynamic> toMap() => toJson();
 
   /// Copy with method for updates
   CounselingSession copyWith({
