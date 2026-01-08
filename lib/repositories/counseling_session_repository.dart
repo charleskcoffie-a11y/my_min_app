@@ -42,7 +42,7 @@ class CounselingSessionRepository {
       final response = await _supabase
           .from('counseling_sessions')
           .update(session.toMap())
-          .eq('id', session.id!)
+          .eq('id', session.id)
           .select()
           .single();
 

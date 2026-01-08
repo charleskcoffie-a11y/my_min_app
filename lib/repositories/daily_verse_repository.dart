@@ -66,7 +66,7 @@ class DailyVerseRepository {
           .maybeSingle();
 
       if (response != null) {
-        return DailyVerse.fromMap(response as Map<String, dynamic>);
+        return DailyVerse.fromMap(response);
       }
       
       // Fallback: get any verse with similar reference (case-insensitive)
@@ -94,7 +94,7 @@ class DailyVerseRepository {
           .maybeSingle();
 
       if (response != null) {
-        return DailyVerse.fromMap(response as Map<String, dynamic>);
+        return DailyVerse.fromMap(response);
       }
     } catch (e) {
       print('Failed to fetch fallback verse: $e');

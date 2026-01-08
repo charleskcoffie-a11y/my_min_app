@@ -208,59 +208,83 @@ class _HymnalScreenState extends State<HymnalScreen> {
   Widget _buildHeader() {
     // Get color based on active tab
     final headerColor = _activeTab == 'MHB'
-        ? Colors.blue.shade700
+        ? Colors.blue
         : _activeTab == 'Canticles'
-            ? Colors.purple.shade700
+            ? Colors.purple
             : _activeTab == 'CAN/Local'
-                ? Colors.teal.shade700
-                : Colors.purple.shade700;
+                ? Colors.teal
+                : Colors.purple;
 
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [headerColor, headerColor.withValues(alpha: 0.8)],
+          colors: [headerColor.shade400, headerColor.shade600],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Reduced from 20
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.music_note, color: Colors.white, size: 28), // Reduced from 32
-          const SizedBox(width: 12), // Reduced from 16
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _activeTab == 'MHB' ? 'Hymns (MHB)' :
-                  _activeTab == 'Canticles' ? 'Canticles' :
-                  _activeTab == 'CAN/Local' ? 'CAN/Local Songs' :
-                  'Canticles & Hymns',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20, // Reduced from 28
-                    fontWeight: FontWeight.bold,
-                  ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.25),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                Text(
-                  'Methodist Church Ghana • ${_allSongs.length} Songs',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12, // Reduced from 14
-                  ),
+                child: Icon(
+                  Icons.music_note_rounded,
+                  color: Colors.white,
+                  size: 24,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _activeTab == 'MHB' ? 'Hymns (MHB)' :
+                      _activeTab == 'Canticles' ? 'Canticles' :
+                      _activeTab == 'CAN/Local' ? 'CAN/Local Songs' :
+                      'Canticles & Hymns',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${_allSongs.length} songs',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          ElevatedButton.icon(
-            onPressed: _seedDatabase,
-            icon: const Icon(Icons.cloud_download, size: 18),
-            label: const Text('Load'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: headerColor,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          const SizedBox(height: 14),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'Methodist Church Ghana',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.95),
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
@@ -271,16 +295,16 @@ class _HymnalScreenState extends State<HymnalScreen> {
   Widget _buildTabs() {
     final tabs = ['Favorites', 'MHB', 'Canticles', 'CAN/Local', 'All'];
     final icons = [
-      Icons.star,
-      Icons.book,
-      Icons.play_circle_outline,
-      Icons.public,
-      Icons.list,
+      Icons.star_rounded,
+      Icons.book_rounded,
+      Icons.play_circle_outline_rounded,
+      Icons.public_rounded,
+      Icons.list_rounded,
     ];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: List.generate(tabs.length, (index) {
           final tab = tabs[index];
@@ -288,38 +312,50 @@ class _HymnalScreenState extends State<HymnalScreen> {
           final isActive = _activeTab == tab;
 
           return Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: GestureDetector(
-              onTap: () => _changeTab(tab),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  gradient: isActive
-                      ? LinearGradient(
-                          colors: [Colors.purple.shade600, Colors.purple.shade400],
-                        )
-                      : null,
-                  color: isActive ? null : Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(20),
-                  border: !isActive ? Border.all(color: Colors.grey.shade400) : null,
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      icon,
-                      color: isActive ? Colors.white : Colors.grey.shade700,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      tab,
-                      style: TextStyle(
+            padding: const EdgeInsets.only(right: 8),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              child: GestureDetector(
+                onTap: () => _changeTab(tab),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    gradient: isActive
+                        ? LinearGradient(
+                            colors: [Colors.purple.shade400, Colors.purple.shade600],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    color: isActive ? null : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: isActive
+                        ? [BoxShadow(
+                            color: Colors.purple.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          )]
+                        : null,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        icon,
                         color: isActive ? Colors.white : Colors.grey.shade700,
-                        fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                        fontSize: 11,
+                        size: 18,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 6),
+                      Text(
+                        tab,
+                        style: TextStyle(
+                          color: isActive ? Colors.white : Colors.grey.shade700,
+                          fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -335,54 +371,98 @@ class _HymnalScreenState extends State<HymnalScreen> {
         isCanticles ? 'Search Canticles...' : 'Search by Number, Title, or Lyrics...';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    setState(() => _searchQuery = value);
-                    _applySearch();
-                  },
-                  decoration: InputDecoration(
-                    hintText: placeholder,
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              PopupMenuButton<String>(
-                onSelected: _setSortMode,
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'number',
-                    child: Text('Sort: Number'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'title',
-                    child: Text('Sort: Title'),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade400),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.all(12),
-                  child: Icon(
-                    Icons.sort,
-                    color: Colors.grey.shade700,
-                  ),
+              ),
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() => _searchQuery = value);
+                  _applySearch();
+                },
+                decoration: InputDecoration(
+                  hintText: placeholder,
+                  hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+                  prefixIcon: Icon(Icons.search_rounded, color: Colors.grey.shade600),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? GestureDetector(
+                          onTap: () {
+                            _searchController.clear();
+                            setState(() => _searchQuery = '');
+                            _applySearch();
+                          },
+                          child: Icon(Icons.close_rounded, color: Colors.grey.shade600, size: 20),
+                        )
+                      : null,
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
                 ),
               ),
-            ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              gradient: LinearGradient(
+                colors: [Colors.grey.shade100, Colors.grey.shade50],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: PopupMenuButton<String>(
+              onSelected: _setSortMode,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'number',
+                  child: Row(
+                    children: [
+                      Icon(Icons.format_list_numbered, color: Colors.blue.shade600, size: 18),
+                      const SizedBox(width: 8),
+                      const Text('Sort by Number'),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'title',
+                  child: Row(
+                    children: [
+                      Icon(Icons.sort_by_alpha, color: Colors.blue.shade600, size: 18),
+                      const SizedBox(width: 8),
+                      const Text('Sort by Title'),
+                    ],
+                  ),
+                ),
+              ],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Icon(
+                  Icons.tune_rounded,
+                  color: Colors.grey.shade700,
+                  size: 20,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -396,101 +476,126 @@ class _HymnalScreenState extends State<HymnalScreen> {
         : _filteredSongs;
 
     return ListView.separated(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(12),
       itemCount: displaySongs.length,
-      separatorBuilder: (context, index) => const Divider(height: 1, indent: 12, endIndent: 12),
+      separatorBuilder: (context, index) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final song = displaySongs[index];
-        return _buildSongListItem(song);
+        return _buildSongCard(song);
       },
     );
   }
 
-  /// Build a compact list item for a song
-  /// Displays: Number | Title | Badge | Favorite button with minimal spacing
-  Widget _buildSongListItem(Song song) {
+  /// Build a modern card-based song item with better visual hierarchy
+  Widget _buildSongCard(Song song) {
     final collection = song.collection;
     final (bgColor, badgeLabel) = _getCollectionColor(collection);
 
     return GestureDetector(
       onTap: () => setState(() => _selectedSong = song),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          children: [
-            // Song number
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: bgColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                song.number.toString(),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: bgColor,
-                ),
-              ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 3),
             ),
-            const SizedBox(width: 12),
-            // Title - Expanded to take remaining space
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          ],
+        ),
+        child: Material(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => setState(() => _selectedSong = song),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
                 children: [
-                  Text(
-                    song.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1F2558),
+                  // Song number badge
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [bgColor.withValues(alpha: 0.7), bgColor],
+                      ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: Text(
+                      song.number.toString(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    song.code.isNotEmpty ? song.code : '',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Color(0xFF94A3B8),
+                  const SizedBox(width: 14),
+                  // Title and code
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          song.title,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1F2558),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        if (song.code.isNotEmpty)
+                          Text(
+                            song.code,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(width: 8),
+                  // Collection badge
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: bgColor.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      badgeLabel,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: bgColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Favorite button
+                  GestureDetector(
+                    onTap: () => _toggleFavorite(song),
+                    child: Icon(
+                      song.isFavorite ? Icons.star_rounded : Icons.star_outline_rounded,
+                      color: song.isFavorite ? Colors.amber.shade400 : Colors.grey.shade400,
+                      size: 22,
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            // Badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: bgColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                badgeLabel,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: bgColor,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            // Favorite button
-            GestureDetector(
-              onTap: () => _toggleFavorite(song),
-              child: Icon(
-                song.isFavorite ? Icons.star : Icons.star_outline,
-                color: song.isFavorite ? Colors.amber : Colors.grey,
-                size: 20,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -564,21 +669,42 @@ class _HymnalScreenState extends State<HymnalScreen> {
   Widget _buildErrorState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, color: Colors.red.shade400, size: 48),
-            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.red.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.error_outline_rounded,
+                color: Colors.red.shade400,
+                size: 48,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Oops! Something went wrong',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
             Text(
               _errorMessage ?? 'Error loading songs',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
               onPressed: _load,
-              child: const Text('Retry'),
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('Try Again'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              ),
             ),
           ],
         ),
@@ -593,20 +719,32 @@ class _HymnalScreenState extends State<HymnalScreen> {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              _activeTab == 'Favorites' ? Icons.star_outline : Icons.search,
-              color: Colors.grey.shade400,
-              size: 48,
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                _activeTab == 'Favorites' ? Icons.star_outline_rounded : Icons.search_rounded,
+                color: Colors.grey.shade500,
+                size: 48,
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
+            Text(
+              _activeTab == 'Favorites' ? 'No Favorites Yet' : 'Nothing Found',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
             ),
           ],
         ),
@@ -624,70 +762,99 @@ class _HymnalScreenState extends State<HymnalScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // App bar with back button and controls
+          // Modern app bar with blur effect
           SliverAppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded),
               onPressed: () => setState(() => _selectedSong = null),
             ),
-            title: const Text('Reading View'),
-            titleSpacing: 4, // Reduced spacing
+            title: const Text('Now Reading'),
+            titleSpacing: 0,
+            elevation: 0,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.grey.shade900,
             actions: [
-              // Font size controls
-              IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () {
-                  if (_fontSize > 14) {
-                    setState(() => _fontSize -= 2);
-                  }
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4), // Reduced from 8
-                child: Center(
-                  child: Text(
-                    _fontSize.toStringAsFixed(0),
-                    style: const TextStyle(fontSize: 12), // Reduced from 14
-                  ),
+              // Font size controls in a compact row
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  if (_fontSize < 48) {
-                    setState(() => _fontSize += 2);
-                  }
-                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.remove_rounded, size: 18),
+                      onPressed: () {
+                        if (_fontSize > 14) {
+                          setState(() => _fontSize -= 2);
+                        }
+                      },
+                      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      padding: const EdgeInsets.all(6),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        _fontSize.toStringAsFixed(0),
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add_rounded, size: 18),
+                      onPressed: () {
+                        if (_fontSize < 48) {
+                          setState(() => _fontSize += 2);
+                        }
+                      },
+                      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      padding: const EdgeInsets.all(6),
+                    ),
+                  ],
+                ),
               ),
               // Favorite button
               IconButton(
                 icon: Icon(
-                  song.isFavorite ? Icons.star : Icons.star_outline,
-                  color: song.isFavorite ? Colors.amber : null,
+                  song.isFavorite ? Icons.star_rounded : Icons.star_outline_rounded,
+                  color: song.isFavorite ? Colors.amber.shade400 : Colors.grey.shade600,
                 ),
                 onPressed: () => _toggleFavorite(song),
               ),
+              const SizedBox(width: 8),
             ],
             pinned: true,
-            expandedHeight: 120,
+            expandedHeight: 140,
             flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [bgColor, bgColor.withValues(alpha: 0.6)],
+                    colors: [bgColor.withValues(alpha: 0.7), bgColor],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        bgColor.withValues(alpha: 0.9),
-                        bgColor.withValues(alpha: 0.7)
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.25),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.music_note_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
                       ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
                     ),
                   ),
                 ),
@@ -697,113 +864,174 @@ class _HymnalScreenState extends State<HymnalScreen> {
           // Content
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16), // Reduced from 24
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Badge and number
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: bgColor.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: bgColor),
-                        ),
-                        child: Text(
-                          '${song.collection} • ${song.code}',
-                          style: TextStyle(
-                            color: bgColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Title
+                  // Title with better typography
                   Text(
                     song.title,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontSize: 22, // Reduced from 28
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Georgia',
+                      color: Color(0xFF1F2558),
+                      height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 6), // Reduced from 8
+                  const SizedBox(height: 12),
 
-                  // Author
+                  // Author with modern styling
                   if (song.author != null && song.author!.isNotEmpty)
-                    Text(
-                      '— ${song.author}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade700,
-                        fontStyle: FontStyle.italic,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Text(
+                        '— ${song.author}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey.shade700,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  const SizedBox(height: 24),
 
-                  // Lyrics
-                  SelectableText(
-                    cleanedLyrics,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: _fontSize,
-                      height: 1.3, // Reduced from 1.6 to tighten spacing
-                      color: Colors.grey.shade900,
+                  const SizedBox(height: 28),
+
+                  // Metadata badges
+                  Wrap(
+                    spacing: 12,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: bgColor.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: bgColor.withValues(alpha: 0.3)),
+                        ),
+                        child: Text(
+                          song.collection,
+                          style: TextStyle(
+                            color: bgColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      if (song.code.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Text(
+                            song.code,
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Lyrics with optimized readability
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: SelectableText(
+                      cleanedLyrics,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: _fontSize,
+                        height: 1.8,
+                        color: Colors.grey.shade900,
+                        fontFamily: 'Georgia',
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 24), // Reduced from 32
 
-                  // Footer
+                  const SizedBox(height: 32),
+
+                  // Copyright and tags
                   if (song.copyright != null && song.copyright!.isNotEmpty)
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.blue.shade200),
                       ),
                       child: Column(
                         children: [
                           Text(
                             'Copyright',
                             style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
+                              fontSize: 13,
+                              color: Colors.blue.shade700,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
+                          const SizedBox(height: 8),
+                          SelectableText(
                             song.copyright!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.blue.shade900,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
                     ),
                   if (song.tags != null && song.tags!.isNotEmpty) ...[
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       alignment: WrapAlignment.center,
                       children: song.tags!
                           .map(
-                            (tag) => Chip(
-                              label: Text(tag),
-                              backgroundColor: Colors.grey.shade200,
+                            (tag) => Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Colors.purple.shade100, Colors.purple.shade200],
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.purple.shade300),
+                              ),
+                              child: Text(
+                                tag,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.purple.shade700,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           )
                           .toList(),
                     ),
                   ],
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

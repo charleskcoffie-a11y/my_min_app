@@ -102,7 +102,7 @@ Maximum 100 characters.
       // Ensure it's short enough for notifications
       final message = response.trim();
       return message.length > 150 
-          ? message.substring(0, 147) + '...'
+          ? '${message.substring(0, 147)}...'
           : message;
     } catch (e) {
       // Fallback to truncated verse

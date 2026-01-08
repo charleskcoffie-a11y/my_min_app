@@ -724,8 +724,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           String? collection = s['collection'];
           if ((collection == null || collection.isEmpty) && parentKey != null) {
             final k = parentKey.toUpperCase();
-            if (k.contains('MHB')) collection = 'MHB';
-            else if (k.contains('CAN') && !k.contains('CANTICLE')) collection = 'CAN';
+            if (k.contains('MHB')) {
+              collection = 'MHB';
+            } else if (k.contains('CAN') && !k.contains('CANTICLE')) collection = 'CAN';
             else if (k.contains('CANTICLE')) collection = 'CANTICLES_EN';
             else collection = parentKey;
           }

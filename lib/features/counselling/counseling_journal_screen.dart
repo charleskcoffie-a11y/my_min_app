@@ -46,7 +46,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
   // Modal State
   bool _isModalOpen = false;
   late CounselingSession _editingSession;
-  bool _createReminder = false;
+  final bool _createReminder = false;
 
   @override
   void initState() {
@@ -110,20 +110,14 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
     }
 
     try {
-      if (_editingSession.id == null) {
-        await _repository.insertSession(_editingSession);
-      } else {
-        await _repository.updateSession(_editingSession);
-      }
-
+      await _repository.updateSession(_editingSession);
+    
       await _loadSessions();
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(_editingSession.id == null
-                ? 'Case created'
-                : 'Case updated'),
+            content: Text('Case updated'),
           ),
         );
       }
@@ -158,7 +152,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
 
     if (confirmed == true) {
       try {
-        await _repository.deleteSession(session.id!);
+        await _repository.deleteSession(session.id);
         await _loadSessions();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -226,7 +220,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
   List<CounselingSession> _getFilteredSessions() {
     return _sessions.where((s) {
       final matchSearch = s.initials.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          (s.summary?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false);
+          (s.summary.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false);
       final matchStatus =
           _filterStatus == 'All' ? true : s.status == _filterStatus;
       return matchSearch && matchStatus;
@@ -590,9 +584,9 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
               const SizedBox(height: 12),
 
               // Summary
-              if (session.summary != null && session.summary!.isNotEmpty)
+              if (session.summary.isNotEmpty)
                 Text(
-                  _blurMode ? '•••••••••••' : session.summary!,
+                  _blurMode ? '•••••••••••' : session.summary,
                   style: GoogleFonts.poppins(
                     fontSize: 13,
                     color: Colors.grey.shade700,
@@ -607,9 +601,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    session.createdAt != null
-                        ? DateFormat('MMM d, y').format(session.createdAt!)
-                        : 'N/A',
+                    DateFormat('MMM d, y').format(session.createdAt),
                     style: GoogleFonts.poppins(
                       fontSize: 11,
                       color: Colors.grey.shade500,
@@ -661,7 +653,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      _editingSession.id == null ? 'New Case' : 'Edit Case',
+                      'Edit Case',
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -697,7 +689,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
 
                 // Case type
                 DropdownButtonFormField<String>(
-                  value: _editingSession.caseType,
+                  initialValue: _editingSession.caseType,
                   items: CASE_TYPES
                       .map((type) => DropdownMenuItem(
                             value: type,
@@ -720,7 +712,7 @@ class _CounselingJournalScreenState extends State<CounselingJournalScreen> {
 
                 // Status
                 DropdownButtonFormField<String>(
-                  value: _editingSession.status,
+                  initialValue: _editingSession.status,
                   items: STATUSES
                       .map((status) => DropdownMenuItem(
                             value: status,

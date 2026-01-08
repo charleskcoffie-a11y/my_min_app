@@ -53,9 +53,9 @@ class _SermonEditorScreenState extends State<SermonEditorScreen> {
     _scriptureController = TextEditingController(text: sermon?.mainText ?? '');
     _introductionController = TextEditingController(text: sermon?.introduction ?? '');
     _backgroundController = TextEditingController(text: sermon?.backgroundContext ?? '');
-    _point1Controller = TextEditingController(text: sermon?.mainPoints[0]?['content'] ?? '');
-    _point2Controller = TextEditingController(text: sermon?.mainPoints[1]?['content'] ?? '');
-    _point3Controller = TextEditingController(text: sermon?.mainPoints[2]?['content'] ?? '');
+    _point1Controller = TextEditingController(text: sermon?.mainPoints[0]['content'] ?? '');
+    _point2Controller = TextEditingController(text: sermon?.mainPoints[1]['content'] ?? '');
+    _point3Controller = TextEditingController(text: sermon?.mainPoints[2]['content'] ?? '');
     _gospelController = TextEditingController(text: sermon?.gospelConnection ?? '');
     _conclusionController = TextEditingController(text: sermon?.conclusion ?? '');
     _altarCallController = TextEditingController(text: sermon?.altarCall ?? '');

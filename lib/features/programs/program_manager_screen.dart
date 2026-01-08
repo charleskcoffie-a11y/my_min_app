@@ -77,7 +77,7 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
   // State variables
   List<Program> _programs = [];
   bool _loading = true;
-  bool _importing = false;
+  final bool _importing = false;
 
   // Filter variables
   String _filterActivity = '';
@@ -727,7 +727,7 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 500),
                         child: DropdownButtonFormField<String>(
-                          value: _filterVenue.isEmpty ? null : _filterVenue,
+                          initialValue: _filterVenue.isEmpty ? null : _filterVenue,
                           hint: const Text('Select Venue'),
                           items: [
                             const DropdownMenuItem(
@@ -759,7 +759,7 @@ class _ProgramManagerScreenState extends State<ProgramManagerScreen> {
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 500),
                         child: DropdownButtonFormField<String>(
-                          value: _filterLead.isEmpty ? null : _filterLead,
+                          initialValue: _filterLead.isEmpty ? null : _filterLead,
                           hint: const Text('Select Lead'),
                           items: [
                             const DropdownMenuItem(

@@ -300,7 +300,7 @@ class _SermonBuilderScreenState extends State<SermonBuilderScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${progress}% Complete',
+                        '$progress% Complete',
                         style: GoogleFonts.poppins(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,

@@ -198,7 +198,7 @@ class _CounselingFormScreenState extends State<CounselingFormScreen> {
 
               // Case Type
               DropdownButtonFormField<String>(
-                value: _selectedCaseType,
+                initialValue: _selectedCaseType,
                 decoration: InputDecoration(
                   labelText: 'Case Type *',
                   prefixIcon: const Icon(Icons.category_outlined),
@@ -219,7 +219,7 @@ class _CounselingFormScreenState extends State<CounselingFormScreen> {
 
               // Status
               DropdownButtonFormField<String>(
-                value: _selectedStatus,
+                initialValue: _selectedStatus,
                 decoration: InputDecoration(
                   labelText: 'Status *',
                   prefixIcon: const Icon(Icons.assignment_outlined),

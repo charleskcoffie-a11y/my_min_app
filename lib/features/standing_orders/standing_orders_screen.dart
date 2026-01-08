@@ -388,7 +388,7 @@ class _StandingOrdersScreenState extends State<StandingOrdersScreen> {
                     return ListTile(
                       title: Text(
                         chunk.text.length > 50
-                            ? chunk.text.substring(0, 50) + '...'
+                            ? '${chunk.text.substring(0, 50)}...'
                             : chunk.text,
                       ),
                       selected: selectedChunk?.id == chunk.id,
